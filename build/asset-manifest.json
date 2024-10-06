@@ -1,0 +1,37 @@
+{
+  "files": {
+    "main.css": "/static/css/main.7986eb79.css",
+    "main.js": "/static/js/main.6267498c.js",
+    "static/media/building.jpg": "/static/media/building.a2d0f55eda534699ae95.jpg",
+    "static/media/home-decor-3.jpeg": "/static/media/home-decor-3.74d13fcbd3c631fc7908.jpeg",
+    "static/media/home-decor-2.jpeg": "/static/media/home-decor-2.b4e5397c9846645ba275.jpeg",
+    "static/media/home-decor-1.jpeg": "/static/media/home-decor-1.05e218fd495ccc65c99d.jpeg",
+    "static/media/bg-signup.jpg": "/static/media/bg-signup.bec2ba7098b7ca00f473.jpg",
+    "static/media/bg-profile.jpg": "/static/media/bg-profile.9c36abe7c27381dbc099.jpg",
+    "static/media/info-card-2.jpg": "/static/media/info-card-2.9a5119d163ea1e152800.jpg",
+    "static/media/info-card-3.jpg": "/static/media/info-card-3.e73b3934a3c41fdb920d.jpg",
+    "static/media/face-4.jpg": "/static/media/face-4.03453a44050c5aca2a3c.jpg",
+    "static/media/face-1.jpg": "/static/media/face-1.d85d07a165e59830cbe2.jpg",
+    "static/media/face-2.jpg": "/static/media/face-2.efe2e35cccc34a237c1d.jpg",
+    "static/media/face-3.jpg": "/static/media/face-3.e08fd4256b0f45292d6a.jpg",
+    "static/media/Google__G__Logo.svg.png": "/static/media/Google__G__Logo.svg.bb49f97a750f1a53695c.png",
+    "static/media/face-6.jpeg": "/static/media/face-6.b75146da5bfdf9d8ae61.jpeg",
+    "static/media/logo.png": "/static/media/logo.4a20d605c9b91b63ddf2.png",
+    "static/media/face-5.jpeg": "/static/media/face-5.e725aef8c892cb21f262.jpeg",
+    "static/media/logo-apple.svg": "/static/media/logo-apple.ca32a70e3573f229be57a4ce05faef2b.svg",
+    "static/media/logo-invision.svg": "/static/media/logo-invision.9914cf42b44071b5326f6ad315a83bba.svg",
+    "static/media/logo-shopify.svg": "/static/media/logo-shopify.98e3f7cf77d4661ce67d796d1158e923.svg",
+    "static/media/logo-jira.svg": "/static/media/logo-jira.a0d2348178d8f7a18e4b5406b3cdccf9.svg",
+    "static/media/logo-slack.svg": "/static/media/logo-slack.cd48b339ddcc336030e0c46b32f4d835.svg",
+    "static/media/logo-atlassian.svg": "/static/media/logo-atlassian.7db5f0ddbe2cfc1d27cb6b81dc560b8f.svg",
+    "index.html": "/index.html",
+    "static/media/logos-facebook.svg": "/static/media/logos-facebook.636d99abf08b3f56f5fa13748601c668.svg",
+    "static/media/pencil.svg": "/static/media/pencil.177258577d59e301b13eb12fe99a2223.svg",
+    "main.7986eb79.css.map": "/static/css/main.7986eb79.css.map",
+    "main.6267498c.js.map": "/static/js/main.6267498c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7986eb79.css",
+    "static/js/main.6267498c.js"
+  ]
+}
