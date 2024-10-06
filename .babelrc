@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    [
+      "import",
+      {
+        "libraryName": "antd",
+        "style": "css" // Import the CSS for each component automatically
+      }
+    ]
+  ]
+}
