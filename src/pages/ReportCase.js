@@ -29,7 +29,7 @@ const ReportCase = () => {
             const response = await fetch(
                 `${process.env.REACT_APP_API_URL}/api/v1/dashboard/report?page=${page}&limit=${limit}&search=${search}&createdAt=${date ? date.format("YYYY-MM-DD") : ""}&sortColumn=${sortColumn}&sortDirection=${sortDirection}`,
                 {
-                    method: "GET",
+                    method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
@@ -85,7 +85,7 @@ const ReportCase = () => {
         setSelectedReport(record); // Set the selected report data
         setIsModalVisible(true); // Show the modal
         await fetchReportImages(record.imagePath,"before"); // Fetch images when report is selected
-        if (record.afterCaseImagePath != ""){
+        if (record.afterCaseImagePath !== ""){
 
             await fetchReportImages(record.afterCaseImagePath,"after"); // Fetch images when report is selected
         }
@@ -98,7 +98,7 @@ const ReportCase = () => {
             const response = await fetch(
                 `${process.env.REACT_APP_API_URL}/images/${reportId}`,
                 {
-                    method: "GET",
+                    method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
@@ -109,7 +109,7 @@ const ReportCase = () => {
             const data = await response.json();
 
             if (response.ok) {
-                if (path == "before") {
+                if (path === "before") {
 
                     setReportImages(data.image_base64); // Assuming the response contains an array of Base64 image strings
                 }else{
@@ -295,7 +295,7 @@ const ReportCase = () => {
 
                                     </div>
                                 </Col>
-                                {   selectedReport.afterCaseImagePath != "" ?  <Col span={8}>
+                                {   selectedReport.afterCaseImagePath !== "" ?  <Col span={8}>
                                     <div>
                                         <h4>Images After:</h4>
                                         <Image

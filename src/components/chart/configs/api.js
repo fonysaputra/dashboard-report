@@ -2,7 +2,7 @@ export const fetchChartData = async () => {
     const token = localStorage.getItem("token");
         try {
             const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/dashboard/report/chart`, {
-                method: "GET",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,

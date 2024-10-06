@@ -5,12 +5,11 @@ import ApexCharts from 'react-apexcharts';
 import { fetchChartData } from './api'; // Adjust the path as per your file structure
 
 import { Typography } from "antd";
-import { MinusOutlined } from "@ant-design/icons";
 
 const LineChart = () => {
   const [chartData, setChartData] = useState(null);
 
-  const { Title, Paragraph } = Typography;
+  const { Title } = Typography;
   useEffect(() => {
     const fetchData = async () => {
       try {

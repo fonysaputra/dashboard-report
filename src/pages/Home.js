@@ -8,12 +8,11 @@ import {
   Typography,
 } from "antd";
 
-import Echart from "../components/chart/EChart";
 import LineChart from "../components/chart/configs/lineChart";
 
 
 function Home() {
-  const { Title, Text } = Typography;
+  const { Title } = Typography;
   const [counts, setCounts] = useState({
     total: "0",
     inProgress: "0",
@@ -28,7 +27,7 @@ function Home() {
       const token = localStorage.getItem("token");
       try {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/dashboard/report/count`, {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
