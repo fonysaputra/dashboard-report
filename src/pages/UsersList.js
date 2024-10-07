@@ -34,7 +34,7 @@ const UserList = () => {
 
             if (response.ok) {
                 setUsers(data.data.data); // Set user data
-                setTotal(data.total); // Set total count for pagination
+                setTotal(data.data.total); // Set total count for pagination
             } else {
                 message.error(data.responseDesc || "Failed to fetch users.");
             }
@@ -187,6 +187,10 @@ const UserList = () => {
             title: "Created At",
             dataIndex: "CreatedAt",
             key: "CreatedAt",
+            render: (_, record) => {
+                const { CreatedAt } = record;
+                return formatDate(CreatedAt) ;
+            },
         },
         {
             title: "Action",
@@ -227,7 +231,10 @@ const UserList = () => {
                 total={total}
                 onChange={handlePaginationChange}
                 style={{ marginTop: 20, float: "right" }}
-
+                showSizeChanger // Show page size changer
+                onShowSizeChange={(current, pageSize) => setLimit(pageSize)} // Update limit when page size changes
+                pageSizeOptions={['5','10', '20', '50', '100']} // Customize page size options
+                
             />
 
             <UserForm
@@ -242,5 +249,19 @@ const UserList = () => {
         </div>
     );
 };
+
+const formatDate = (isoString) => {
+    const date = new Date(isoString);
+  
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+  
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+  
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  };
 
 export default UserList;

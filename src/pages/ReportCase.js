@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Table, Input, Pagination, message, Card, DatePicker, Col, Row, Select, Modal, Image, Spin } from "antd";
+import { Table, Input, Pagination, message, Card, DatePicker, Col, Row, Select, Modal, Image, Spin, Button } from "antd";
 import { debounce } from "lodash";
+import * as XLSX from "xlsx"; // Import xlsx library
 
 const { Option } = Select;
 
@@ -41,7 +42,7 @@ const ReportCase = () => {
 
             if (response.ok) {
                 setReport(data.data.data);
-                setTotal(data.total);
+                setTotal(data.data.total);
             } else {
                 message.error(data.responseDesc || "Failed to fetch report.");
             }
@@ -84,10 +85,10 @@ const ReportCase = () => {
     const handleRowClick = async (record) => {
         setSelectedReport(record); // Set the selected report data
         setIsModalVisible(true); // Show the modal
-        await fetchReportImages(record.imagePath,"before"); // Fetch images when report is selected
-        if (record.afterCaseImagePath !== ""){
+        await fetchReportImages(record.imagePath, "before"); // Fetch images when report is selected
+        if (record.afterCaseImagePath !== "") {
 
-            await fetchReportImages(record.afterCaseImagePath,"after"); // Fetch images when report is selected
+            await fetchReportImages(record.afterCaseImagePath, "after"); // Fetch images when report is selected
         }
     };
 
@@ -112,8 +113,8 @@ const ReportCase = () => {
                 if (path === "before") {
 
                     setReportImages(data.image_base64); // Assuming the response contains an array of Base64 image strings
-                }else{
-                    
+                } else {
+
                     setReportAfterImages(data.image_base64); // Assuming the response contains an array of Base64 image strings
                 }
             } else {
@@ -132,6 +133,14 @@ const ReportCase = () => {
         setSelectedReport(null); // Clear the selected report
         setReportImages([]); // Clear the images
         setReportAfterImages([]); // Clear the images
+    };
+
+    // Function to export report data to Excel
+    const exportToExcel = () => {
+        const worksheet = XLSX.utils.json_to_sheet(report);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Reports");
+        XLSX.writeFile(workbook, "Reports-Cases.xlsx");
     };
 
     const columns = [
@@ -195,10 +204,29 @@ const ReportCase = () => {
             title: "Reported Date",
             dataIndex: "createdAt",
             key: "createdAt",
+            render: (_, record) => {
+                const { createdAt } = record;
+                return formatDate(createdAt) ;
+            },
+
             onCell: (record) => ({
                 onClick: () => handleRowClick(record), // Add onClick to each cell
             }),
         },
+
+        {
+            title: "Reported End",
+            dataIndex: "updatedAt",
+            key: "updatedAt",
+            render: (_, record) => {
+                const { status, updatedAt } = record;
+                return status === "DONE" ? formatDate(updatedAt) : "-";
+            },
+            onCell: (record) => ({
+                onClick: () => handleRowClick(record), // Add onClick to each cell
+            }),
+        },
+
     ];
 
     return (
@@ -238,9 +266,14 @@ const ReportCase = () => {
                             <Option value="title|desc">Title (Desc)</Option>
                             <Option value="created_by|asc">Created By (Asc)</Option>
                             <Option value="created_by|desc">Created By (Desc)</Option>
+                            <Option value="updated_at|asc">Reported End (Asc)</Option>
+                            <Option value="updated_at|desc">Reported End (Desc)</Option>
                         </Select>
                     </Col>
                 </Row>
+                <Button onClick={exportToExcel} type="primary" style={{ marginBottom: 16 }}>
+                Export to Excel
+            </Button>
             </Card>
 
             <Table
@@ -258,6 +291,9 @@ const ReportCase = () => {
                 total={total}
                 onChange={handlePaginationChange}
                 style={{ marginTop: 20, float: "right" }}
+                showSizeChanger // Show page size changer
+                onShowSizeChange={(current, pageSize) => setLimit(pageSize)} // Update limit when page size changes
+                pageSizeOptions={['5', '10', '20', '50', '100']} // Customize page size options
             />
 
             {/* Modal for detailed report */}
@@ -276,8 +312,8 @@ const ReportCase = () => {
                         <p><strong>Progress By:</strong> {selectedReport.nameAssign}</p>
                         <p><strong>Location Type:</strong> {selectedReport.locationType}</p>
                         <p><strong>Location Name:</strong> {selectedReport.locationName}</p>
-                        <p><strong>Reported Date:</strong> {selectedReport.createdAt}</p>
-
+                        <p><strong>Reported Date:</strong> {formatDate(selectedReport.createdAt)}</p> 
+                        <p><strong>Reported End:</strong> {selectedReport.status === "DONE" ? formatDate(selectedReport.updatedAt) : "-"}</p>
                         {/* Display loading state for images */}
                         {loadingImages ? (
                             <Spin size="large" />
@@ -295,7 +331,7 @@ const ReportCase = () => {
 
                                     </div>
                                 </Col>
-                                {   selectedReport.afterCaseImagePath !== "" ?  <Col span={8}>
+                                {selectedReport.afterCaseImagePath !== "" ? <Col span={8}>
                                     <div>
                                         <h4>Images After:</h4>
                                         <Image
@@ -306,8 +342,8 @@ const ReportCase = () => {
                                         />
 
                                     </div>
-                                </Col> :""}
-                               
+                                </Col> : ""}
+
 
                             </Row>
 
@@ -318,5 +354,19 @@ const ReportCase = () => {
         </div>
     );
 };
+
+const formatDate = (isoString) => {
+    const date = new Date(isoString);
+  
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+  
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+  
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  };
 
 export default ReportCase;
