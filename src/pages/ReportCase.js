@@ -135,6 +135,30 @@ const ReportCase = () => {
         setReportAfterImages([]); // Clear the images
     };
 
+    const handleDeleteCases = async (id) => {
+        const token = localStorage.getItem("token");
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/dashboard/report/cases/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (response.ok) {
+                message.success("Cases deleted successfully!");
+
+                fetchReport(page, limit, search, selectedDate, sortColumn, sortDirection);
+            } else {
+                message.error("Failed to delete cases.");
+            }
+        } catch (error) {
+            message.error("An error occurred while deleting Cases.");
+            console.error("Delete error:", error);
+        }
+    };
+
     // Function to export report data to Excel
     const exportToExcel = () => {
         const worksheet = XLSX.utils.json_to_sheet(report);
@@ -206,7 +230,7 @@ const ReportCase = () => {
             key: "createdAt",
             render: (_, record) => {
                 const { createdAt } = record;
-                return formatDate(createdAt) ;
+                return formatDate(createdAt);
             },
 
             onCell: (record) => ({
@@ -225,6 +249,16 @@ const ReportCase = () => {
             onCell: (record) => ({
                 onClick: () => handleRowClick(record), // Add onClick to each cell
             }),
+        },
+
+        {
+            title: "Action",
+            key: "action",
+            render: (_, report) => (
+                <>
+                    <Button onClick={() => handleDeleteCases(report.id)} type="danger">Delete</Button>
+                </>
+            ),
         },
 
     ];
@@ -272,8 +306,8 @@ const ReportCase = () => {
                     </Col>
                 </Row>
                 <Button onClick={exportToExcel} type="primary" style={{ marginBottom: 16 }}>
-                Export to Excel
-            </Button>
+                    Export to Excel
+                </Button>
             </Card>
 
             <Table
@@ -312,7 +346,7 @@ const ReportCase = () => {
                         <p><strong>Progress By:</strong> {selectedReport.nameAssign}</p>
                         <p><strong>Location Type:</strong> {selectedReport.locationType}</p>
                         <p><strong>Location Name:</strong> {selectedReport.locationName}</p>
-                        <p><strong>Reported Date:</strong> {formatDate(selectedReport.createdAt)}</p> 
+                        <p><strong>Reported Date:</strong> {formatDate(selectedReport.createdAt)}</p>
                         <p><strong>Reported End:</strong> {selectedReport.status === "DONE" ? formatDate(selectedReport.updatedAt) : "-"}</p>
                         {/* Display loading state for images */}
                         {loadingImages ? (
@@ -357,16 +391,16 @@ const ReportCase = () => {
 
 const formatDate = (isoString) => {
     const date = new Date(isoString);
-  
+
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
     const day = String(date.getDate()).padStart(2, '0');
-  
+
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
     const seconds = String(date.getSeconds()).padStart(2, '0');
-  
+
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  };
+};
 
 export default ReportCase;
