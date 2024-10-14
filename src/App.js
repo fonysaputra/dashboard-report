@@ -12,6 +12,8 @@ import CaseList from "./pages/ReportCase"; // Import the UserList component
 import "antd/dist/antd.css";
 import "./assets/styles/main.css";
 import "./assets/styles/responsive.css";
+import TitleList from "./pages/TitlePage";
+import RoomList from "./pages/RoomPage";
 
 function App() {
     return (
@@ -25,6 +27,8 @@ function App() {
                     <ProtectedRoute exact path="/profile" component={Profile} />
                     <ProtectedRoute exact path="/users" component={UserList} />
                     <ProtectedRoute exact path="/report-case" component={CaseList} />
+                    <ProtectedRoute exact path="/master-data-title" component={TitleList} />
+                    <ProtectedRoute exact path="/master-data-room" component={RoomList} />
                     <Redirect from="*" to="/dashboard" />
                 </Main>
             </Switch>

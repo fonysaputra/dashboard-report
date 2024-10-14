@@ -133,6 +133,38 @@ function Sidenav({ color }) {
             <span className="label">Report Cases</span>
           </NavLink>
         </Menu.Item>
+        <Menu.Item className="menu-item-header" key="5">
+          Master Data
+        </Menu.Item>
+     
+
+        <Menu.Item key="4">
+          <NavLink to="/master-data-title">
+            <span
+              className="icon"
+              style={{
+                background: page === "master-data-title" ? color : "",
+              }}
+            >
+              {signin}
+            </span>
+            <span className="label">Title</span>
+          </NavLink>
+        </Menu.Item>
+
+        <Menu.Item key="5">
+          <NavLink to="/master-data-room">
+            <span
+              className="icon"
+              style={{
+                background: page === "master-data-room" ? color : "",
+              }}
+            >
+              {signin}
+            </span>
+            <span className="label">Room List</span>
+          </NavLink>
+        </Menu.Item>
 
        
       </Menu>

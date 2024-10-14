@@ -2,25 +2,25 @@ import React, { useEffect, useState, useRef } from "react";
 import { Table, Input, Pagination, message, Button } from "antd";
 import { debounce } from "lodash";
 
-import UserForm from "../components/layout/UserForm"; // Import the UserForm component
-const UserList = () => {
+import TitleForm from "../components/layout/TitleForm"; // Import the titleForm component
+const TitleList = () => {
     const resizeObserverRef = useRef(null);
 
-    const [users, setUsers] = useState([]);
+    const [titles, settitles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const [search, setSearch] = useState("");
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [editingUser, setEditingUser] = useState(null);
+    const [editingTitle, seteditingTitle] = useState(null);
 
-    const fetchUsers = async (page, limit, search) => {
+    const fetchtitles = async (page, limit, search) => {
         setLoading(true);
         try {
             const token = localStorage.getItem("token");
             const response = await fetch(
-                `${process.env.REACT_APP_API_URL}/api/v1/users?page=${page}&limit=${limit}&username=${search}`,
+                `${process.env.REACT_APP_API_URL}/api/v1/case/title/all?page=${page}&limit=${limit}&titlename=${search}`,
                 {
                     method: "POST",
                     headers: {
@@ -33,13 +33,13 @@ const UserList = () => {
             const data = await response.json();
 
             if (response.ok) {
-                setUsers(data.data.data); // Set user data
+                settitles(data.data.data); // Set title data
                 setTotal(data.data.total); // Set total count for pagination
             } else {
-                message.error(data.responseDesc || "Failed to fetch users.");
+                message.error(data.responseDesc || "Failed to fetch titles.");
             }
         } catch (error) {
-            message.error("An error occurred while fetching users.");
+            message.error("An error occurred while fetching titles.");
             console.error("Fetch error:", error);
         } finally {
             setLoading(false);
@@ -47,7 +47,7 @@ const UserList = () => {
     };
 
     useEffect(() => {
-        fetchUsers(page, limit, search);
+        fetchtitles(page, limit, search);
 
         const resizeObserver = new ResizeObserver(debounce(() => {
             // Your resize handling logic
@@ -71,20 +71,20 @@ const UserList = () => {
         setLimit(pageSize);
     };
 
-    const handleAddUser = () => {
-        setEditingUser(null);
+    const handleAddtitle = () => {
+        seteditingTitle(null);
         setIsModalVisible(true);
     };
 
-    const handleEditUser = (user) => {
-        setEditingUser(user);
+    const handleEdittitle = (title) => {
+        seteditingTitle(title);
         setIsModalVisible(true);
     };
 
-    const handleDeleteUser = async (userId) => {
+    const handleDeletetitle = async (titleId) => {
         const token = localStorage.getItem("token");
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/users/${userId}`, {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/case/title/${titleId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -93,55 +93,33 @@ const UserList = () => {
             });
 
             if (response.ok) {
-                message.success("User deleted successfully!");
-                fetchUsers(page, limit, search); // Re-fetch users after delete
+                message.success("title deleted successfully!");
+                fetchtitles(page, limit, search); // Re-fetch titles after delete
             } else {
-                message.error("Failed to delete user.");
+                message.error("Failed to delete title.");
             }
         } catch (error) {
-            message.error("An error occurred while deleting user.");
+            message.error("An error occurred while deleting title.");
             console.error("Delete error:", error);
         }
     };
 
-    const handleCreateOrUpdateUser = async (userData) => {
+    const handleCreateOrUpdatetitle = async (titleData) => {
         const token = localStorage.getItem("token");
         try {
-            const method = editingUser ? "PUT" : "POST"; // Determine method based on editingUser state
-            const url = editingUser
-                ? `${process.env.REACT_APP_API_URL}/api/v1/users/${editingUser.ID}`
-                : `${process.env.REACT_APP_API_URL}/api/v1/user/register`;
+            const method = editingTitle ? "PUT" : "POST"; // Determine method based on editingTitle state
+            const url = editingTitle
+                ? `${process.env.REACT_APP_API_URL}/api/v1/case/title/${editingTitle.id}`
+                : `${process.env.REACT_APP_API_URL}/api/v1/case/title`;
 
 
-            console.log(`cek roles ${userData.roles}`)
-            switch (userData.roles) {
-                case "House Keeping":
-                    userData.roles = "HK"
-                    break;
-                case "Admin":
-                    userData.roles = "ADMIN"
-                    break;
-                case "Viewer":
-                        userData.roles = "VIEWER"
-                        break;
-                case "Engineer":
-                    userData.roles = "ENG"
-                    break;
-                case "Front Office":
-                    userData.roles = "FO"
-                    break;
-                default:
-                    break;
-            }
-            // Only include the password if creating a new user
-            const body = editingUser ?
+           
+            // Only include the password if creating a new title
+            const body = editingTitle ?
                 {
-                    username: userData.username,
-                    name: userData.name,
-                    tittle: userData.tittle,
-                    roles: userData.roles,
-                    password: userData.password
-                } : userData;
+                    nameTitle: titleData.nameTitle,
+                  
+                } : titleData;
 
             const response = await fetch(url, {
                 method: method,
@@ -153,55 +131,46 @@ const UserList = () => {
             });
 
             if (response.ok) {
-                message.success(editingUser ? "User updated successfully!" : "User created successfully!");
+                message.success(editingTitle ? "title updated successfully!" : "title created successfully!");
                 setIsModalVisible(false); // Close the modal
-                fetchUsers(page, limit, search); // Re-fetch users after create/update
+                fetchtitles(page, limit, search); // Re-fetch titles after create/update
             } else {
-                message.error("Failed to save user.");
+                message.error("Failed to save title.");
             }
         } catch (error) {
-            message.error("An error occurred while saving user.");
+            message.error("An error occurred while saving title.");
             console.error("Save error:", error);
         }
     };
 
     const columns = [
         {
-            title: "Username",
-            dataIndex: "username",
-            key: "username",
+            title: "id",
+            dataIndex: "id",
+            key: "id",
         },
         {
-            title: "Name",
-            dataIndex: "name",
-            key: "name",
+            title: "Title Name",
+            dataIndex: "nameTitle",
+            key: "nameTitle",
         },
-        {
-            title: "Title",
-            dataIndex: "tittle",
-            key: "tittle",
-        },
-        {
-            title: "Roles",
-            dataIndex: "roles",
-            key: "roles",
-        },
+       
         {
             title: "Created At",
-            dataIndex: "CreatedAt",
-            key: "CreatedAt",
+            dataIndex: "createdAt",
+            key: "createdAt",
             render: (_, record) => {
-                const { CreatedAt } = record;
-                return formatDate(CreatedAt) ;
+                const { createdAt } = record;
+                return formatDate(createdAt) ;
             },
         },
         {
             title: "Action",
             key: "action",
-            render: (_, user) => (
+            render: (_, title) => (
                 <>
-                    <Button onClick={() => handleEditUser(user)} style={{ marginRight: 8 }}>Edit</Button>
-                    <Button onClick={() => handleDeleteUser(user.ID)} type="danger">Delete</Button>
+                    <Button onClick={() => handleEdittitle(title)} style={{ marginRight: 8 }}>Edit</Button>
+                    <Button onClick={() => handleDeletetitle(title.id)} type="danger">Delete</Button>
                 </>
             ),
         },
@@ -209,8 +178,8 @@ const UserList = () => {
 
     return (
         <div>
-            <Button type="primary" onClick={handleAddUser} style={{ marginBottom: 20 }}>
-                Add User
+            <Button type="primary" onClick={handleAddtitle} style={{ marginBottom: 20 }}>
+                Add title
             </Button>
             <Input.Search
                 placeholder="Search"
@@ -221,9 +190,9 @@ const UserList = () => {
             />
             <Table
                 columns={columns}
-                dataSource={users}
+                dataSource={titles}
                 loading={loading}
-                rowKey="ID" // Assuming each user has a unique ID
+                rowKey="id" // Assuming each title has a unique ID
                 pagination={false} // Disable default pagination to use custom one
                 size="middle" // Optional: set table size to middle
                 scroll={{ x: 'max-content' }} // Prevent layout shifts
@@ -240,14 +209,14 @@ const UserList = () => {
                 
             />
 
-            <UserForm
+            <TitleForm
                 visible={isModalVisible}
-                onCreate={handleCreateOrUpdateUser}
+                onCreate={handleCreateOrUpdatetitle}
                 onCancel={() => {
                     setIsModalVisible(false);
-                    setEditingUser(null);
+                    seteditingTitle(null);
                 }}
-                user={editingUser} // Pass the current user data to the form
+                title={editingTitle} // Pass the current title data to the form
             />
         </div>
     );
@@ -267,4 +236,4 @@ const formatDate = (isoString) => {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
 
-export default UserList;
+export default TitleList;

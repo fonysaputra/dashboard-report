@@ -60,6 +60,7 @@ const UserForm = ({ visible, onCreate, onCancel, user }) => {
                 >
                     <Select placeholder="Select a role">
                         <Option value="ADMIN">Admin</Option>
+                        <Option value="VIEWER">Viewer</Option>
                         <Option value="FO">Front Office</Option>
                         <Option value="HK">House Keeping</Option>
                         <Option value="ENG">Engineering</Option>
