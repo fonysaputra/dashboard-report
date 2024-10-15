@@ -9,6 +9,8 @@ function Sidenav({ color }) {
   const { pathname } = useLocation();
   const page = pathname.replace("/", "");
 
+  const role = localStorage.getItem("rl");
+
   const dashboard = [
     <svg
       width="20"
@@ -58,7 +60,7 @@ function Sidenav({ color }) {
         fill="#fff"
       ></path>
     </svg>
-,
+    ,
   ];
 
 
@@ -103,7 +105,7 @@ function Sidenav({ color }) {
             <span className="label">Dashboard</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item key="2">
+        {role === "ADMIN" ? <Menu.Item key="2">
           <NavLink to="/users">
             <span
               className="icon"
@@ -115,11 +117,12 @@ function Sidenav({ color }) {
             </span>
             <span className="label">Users</span>
           </NavLink>
-        </Menu.Item>
+        </Menu.Item> : <></>}
+
         <Menu.Item className="menu-item-header" key="5">
           Reported
         </Menu.Item>
-     
+
         <Menu.Item key="3">
           <NavLink to="/report-case">
             <span
@@ -133,12 +136,11 @@ function Sidenav({ color }) {
             <span className="label">Report Cases</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item className="menu-item-header" key="5">
+        {role === "ADMIN" ? <Menu.Item className="menu-item-header" key="5">
           Master Data
-        </Menu.Item>
-     
+        </Menu.Item> : <></>}
 
-        <Menu.Item key="4">
+        {role === "ADMIN" ? <Menu.Item key="4">
           <NavLink to="/master-data-title">
             <span
               className="icon"
@@ -151,8 +153,8 @@ function Sidenav({ color }) {
             <span className="label">Title</span>
           </NavLink>
         </Menu.Item>
-
-        <Menu.Item key="5">
+          : <></>}
+        {role === "ADMIN" ? <Menu.Item key="5">
           <NavLink to="/master-data-room">
             <span
               className="icon"
@@ -164,9 +166,10 @@ function Sidenav({ color }) {
             </span>
             <span className="label">Room List</span>
           </NavLink>
-        </Menu.Item>
+        </Menu.Item> : <></>}
 
-       
+
+
       </Menu>
 
     </>

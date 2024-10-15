@@ -22,9 +22,12 @@ const ReportCase = () => {
     const [loadingImages, setLoadingImages] = useState(false); // State to manage loading images
     const [reportImages, setReportImages] = useState([]); // State to store Base64 images
     const [reportAfterImages, setReportAfterImages] = useState([]); // State to store Base64 images
+    
+    const role = localStorage.getItem("rl");
 
     const fetchReport = async (page, limit, search, date, sortColumn, sortDirection) => {
         setLoading(true);
+        
         try {
             const token = localStorage.getItem("token");
             const response = await fetch(
@@ -256,7 +259,8 @@ const ReportCase = () => {
             key: "action",
             render: (_, report) => (
                 <>
-                    <Button onClick={() => handleDeleteCases(report.id)} type="danger">Delete</Button>
+                {role === "ADMIN" ? 
+                    <Button onClick={() => handleDeleteCases(report.id)} type="danger">Delete</Button> : <></> }
                 </>
             ),
         },

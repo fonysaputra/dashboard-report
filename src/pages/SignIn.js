@@ -60,6 +60,7 @@ class SignIn extends Component {
         }
 
         localStorage.setItem("token", data.data.token); // Save token
+        localStorage.setItem("rl", data.data.rl); // Save role
 
         this.setState({ loading: false }); // Stop loading spinner
         this.props.history.push("/dashboard"); // Redirect to dashboard
