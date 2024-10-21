@@ -335,6 +335,7 @@ const ReportCase = () => {
                             style={{ width: '100%', marginBottom: 20 }}
                                placeholder="Change Status"
                         >
+                             <Option value="">All</Option>
                             <Option value="OPEN">Open</Option>
                             <Option value="IN_PROGRESS">In Progress</Option>
                             <Option value="REVIEW">Review</Option>
