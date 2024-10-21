@@ -1,12 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Input, Pagination, message, Card, DatePicker, Col, Row, Select, Modal, Image, Spin, Button } from "antd";
-import { debounce } from "lodash";
+import { debounce } from "lodash"; 
 import * as XLSX from "xlsx"; // Import xlsx library
 
 const { Option } = Select;
 
 const ReportCase = () => {
-    const resizeObserverRef = useRef(null);
 
     const [report, setReport] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -16,22 +15,24 @@ const ReportCase = () => {
     const [search, setSearch] = useState("");
     const [selectedDate, setSelectedDate] = useState(null);
     const [sortColumn, setSortColumn] = useState("created_at");
-    const [sortDirection, setSortDirection] = useState("asc");
+    const [sortDirection, setSortDirection] = useState("desc");
     const [selectedReport, setSelectedReport] = useState(null); // State for selected report
     const [isModalVisible, setIsModalVisible] = useState(false); // State to control modal visibility
     const [loadingImages, setLoadingImages] = useState(false); // State to manage loading images
     const [reportImages, setReportImages] = useState([]); // State to store Base64 images
     const [reportAfterImages, setReportAfterImages] = useState([]); // State to store Base64 images
     
+    const [status, setStatus] = useState("");
+    
     const role = localStorage.getItem("rl");
 
-    const fetchReport = async (page, limit, search, date, sortColumn, sortDirection) => {
+    const fetchReport = async (page, limit, search, date, sortColumn, sortDirection,status) => {
         setLoading(true);
         
         try {
             const token = localStorage.getItem("token");
             const response = await fetch(
-                `${process.env.REACT_APP_API_URL}/api/v1/dashboard/report?page=${page}&limit=${limit}&search=${search}&createdAt=${date ? date.format("YYYY-MM-DD") : ""}&sortColumn=${sortColumn}&sortDirection=${sortDirection}`,
+                `${process.env.REACT_APP_API_URL}/api/v1/dashboard/report?page=${page}&limit=${limit}&search=${search}&createdAt=${date ? date.format("YYYY-MM-DD") : ""}&sortColumn=${sortColumn}&sortDirection=${sortDirection}&status=${status}`,
                 {
                     method: "POST",
                     headers: {
@@ -58,15 +59,25 @@ const ReportCase = () => {
     };
 
     useEffect(() => {
-        fetchReport(page, limit, search, selectedDate, sortColumn, sortDirection);
-        const resizeObserver = new ResizeObserver(debounce(() => {
-            // Your resize handling logic
-        }, 200));
+        
+        fetchReport(page, limit, search, selectedDate, sortColumn, sortDirection,status);
+        const observer = new ResizeObserver(
+            debounce(() => {
+                requestAnimationFrame(() => {
+                    console.log("Resize observer callback invoked");
 
-        resizeObserver.observe(document.body);
-        resizeObserverRef.current = resizeObserver;
+                    // Your resize handling logic
+                });
+            }, 200) // Delay of 200ms to avoid too many triggers
+        );
 
-    }, [page, limit, search, selectedDate, sortColumn, sortDirection]);
+        observer.observe(document.body); // Observe relevant DOM elements
+
+        return () => {
+            observer.disconnect(); // Clean up on component unmount
+        };
+
+    }, [page, limit, search, selectedDate, sortColumn, sortDirection,status]);
 
     const handleSearch = (e) => {
         setSearch(e.target.value);
@@ -82,6 +93,12 @@ const ReportCase = () => {
         const [column, direction] = value.split("|");
         setSortColumn(column);
         setSortDirection(direction);
+        setPage(1);
+    };
+
+    const handleSortStatus = (value) => {
+      
+        setStatus(value);
         setPage(1);
     };
 
@@ -152,7 +169,7 @@ const ReportCase = () => {
             if (response.ok) {
                 message.success("Cases deleted successfully!");
 
-                fetchReport(page, limit, search, selectedDate, sortColumn, sortDirection);
+                fetchReport(page, limit, search, selectedDate, sortColumn, sortDirection,status);
             } else {
                 message.error("Failed to delete cases.");
             }
@@ -295,6 +312,8 @@ const ReportCase = () => {
                             onChange={handleSortChange}
                             size="large"
                             style={{ width: '100%', marginBottom: 20 }}
+                      
+                         
                         >
                             <Option value="created_at|asc">Reported Date (Asc)</Option>
                             <Option value="created_at|desc">Reported Date (Desc)</Option>
@@ -306,6 +325,21 @@ const ReportCase = () => {
                             <Option value="created_by|desc">Created By (Desc)</Option>
                             <Option value="updated_at|asc">Reported End (Asc)</Option>
                             <Option value="updated_at|desc">Reported End (Desc)</Option>
+                        </Select>
+                    </Col>
+                    <Col span={8}>
+                        <Select
+                           // defaultValue={`${sortColumn}|${sortDirection}`}
+                            onChange={handleSortStatus}
+                            size="large"
+                            style={{ width: '100%', marginBottom: 20 }}
+                               placeholder="Change Status"
+                        >
+                            <Option value="OPEN">Open</Option>
+                            <Option value="IN_PROGRESS">In Progress</Option>
+                            <Option value="REVIEW">Review</Option>
+                            <Option value="DONE">Done</Option>
+
                         </Select>
                     </Col>
                 </Row>

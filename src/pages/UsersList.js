@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Table, Input, Pagination, message, Button } from "antd";
+import { Table, Input, Pagination, message, Button,Modal } from "antd";
 import { debounce } from "lodash";
 
 import UserForm from "../components/layout/UserForm"; // Import the UserForm component
@@ -14,6 +14,10 @@ const UserList = () => {
     const [search, setSearch] = useState("");
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editingUser, setEditingUser] = useState(null);
+
+    const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false);
+const [password, setPassword] = useState("");
+const [userForPasswordUpdate, setUserForPasswordUpdate] = useState(null);
 
     const fetchUsers = async (page, limit, search) => {
         setLoading(true);
@@ -130,6 +134,9 @@ const UserList = () => {
                 case "Front Office":
                     userData.roles = "FO"
                     break;
+                    case "Reviewer":
+                        userData.roles = "EFO"
+                        break;
                 default:
                     break;
             }
@@ -165,6 +172,42 @@ const UserList = () => {
         }
     };
 
+
+    const handleUpdatePassword = (user) => {
+        setUserForPasswordUpdate(user);
+        setIsPasswordModalVisible(true);
+    };
+    
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+    };
+    
+    const handlePasswordSubmit = async () => {
+        const token = localStorage.getItem("token");
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/users/${userForPasswordUpdate.ID}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ password }), // Send new password
+            });
+    
+            if (response.ok) {
+                message.success("Password updated successfully!");
+                setIsPasswordModalVisible(false);
+                setPassword(""); // Clear the password input
+            } else {
+                message.error("Failed to update password.");
+            }
+        } catch (error) {
+            message.error("An error occurred while updating the password.");
+            console.error("Password update error:", error);
+        }
+    };
+
+    
     const columns = [
         {
             title: "Username",
@@ -200,6 +243,7 @@ const UserList = () => {
             key: "action",
             render: (_, user) => (
                 <>
+                 <Button onClick={() => handleUpdatePassword(user)} style={{ marginRight: 8 }} type="primary">Update Password</Button>
                     <Button onClick={() => handleEditUser(user)} style={{ marginRight: 8 }}>Edit</Button>
                     <Button onClick={() => handleDeleteUser(user.ID)} type="danger">Delete</Button>
                 </>
@@ -249,6 +293,20 @@ const UserList = () => {
                 }}
                 user={editingUser} // Pass the current user data to the form
             />
+
+<Modal
+            title="Update Password"
+            visible={isPasswordModalVisible}
+            onCancel={() => setIsPasswordModalVisible(false)}
+            onOk={handlePasswordSubmit}
+        >
+            <Input.Password
+                placeholder="Enter new password"
+                value={password}
+                onChange={handlePasswordChange}
+            />
+        </Modal>
+
         </div>
     );
 };

@@ -15,7 +15,16 @@ import "./assets/styles/responsive.css";
 import TitleList from "./pages/TitlePage";
 import RoomList from "./pages/RoomPage";
 
+const resizeObserverErr = window.onerror;
+window.onerror = function(message, source, lineno, colno, error) {
+    if (message === "ResizeObserver loop completed with undelivered notifications.") {
+        return true; // Suppress error
+    }
+    return resizeObserverErr(message, source, lineno, colno, error);
+};
+
 function App() {
+    
     return (
         <div className="App">
             <Switch>

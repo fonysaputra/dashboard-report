@@ -61,9 +61,10 @@ const UserForm = ({ visible, onCreate, onCancel, user }) => {
                     <Select placeholder="Select a role">
                         <Option value="ADMIN">Admin</Option>
                         <Option value="VIEWER">Viewer</Option>
-                        <Option value="FO">Front Office</Option>
-                        <Option value="HK">House Keeping</Option>
-                        <Option value="ENG">Engineering</Option>
+                        <Option value="FO">Front Office (Mobile)</Option>
+                        <Option value="EFO">Reviewer (Mobile)</Option>
+                        <Option value="HK">House Keeping (Mobile)</Option>
+                        <Option value="ENG">Engineering (Mobile)</Option>
                         {/* Add more roles as needed */}
                     </Select>
                 </Form.Item>
