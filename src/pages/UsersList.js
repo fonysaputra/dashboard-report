@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Table, Input, Pagination, message, Button,Modal } from "antd";
+import { Table, Input, Pagination, message, Button, Modal } from "antd";
 import { debounce } from "lodash";
 
 import UserForm from "../components/layout/UserForm"; // Import the UserForm component
@@ -16,8 +16,8 @@ const UserList = () => {
     const [editingUser, setEditingUser] = useState(null);
 
     const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false);
-const [password, setPassword] = useState("");
-const [userForPasswordUpdate, setUserForPasswordUpdate] = useState(null);
+    const [password, setPassword] = useState("");
+    const [userForPasswordUpdate, setUserForPasswordUpdate] = useState(null);
 
     const fetchUsers = async (page, limit, search) => {
         setLoading(true);
@@ -33,6 +33,14 @@ const [userForPasswordUpdate, setUserForPasswordUpdate] = useState(null);
                     },
                 }
             );
+
+            // Check if the response status is 401 (Unauthorized)
+            if (response.status === 401) {
+                localStorage.removeItem("token"); // Remove the token from local storage
+                window.location.href = "/sign-in"; // Redirect to the login page
+                setLoading(false);
+                return; // Stop further execution
+            }
 
             const data = await response.json();
 
@@ -126,17 +134,17 @@ const [userForPasswordUpdate, setUserForPasswordUpdate] = useState(null);
                     userData.roles = "ADMIN"
                     break;
                 case "Viewer":
-                        userData.roles = "VIEWER"
-                        break;
+                    userData.roles = "VIEWER"
+                    break;
                 case "Engineer":
                     userData.roles = "ENG"
                     break;
                 case "Front Office":
                     userData.roles = "FO"
                     break;
-                    case "Reviewer":
-                        userData.roles = "EFO"
-                        break;
+                case "Reviewer":
+                    userData.roles = "EFO"
+                    break;
                 default:
                     break;
             }
@@ -177,11 +185,11 @@ const [userForPasswordUpdate, setUserForPasswordUpdate] = useState(null);
         setUserForPasswordUpdate(user);
         setIsPasswordModalVisible(true);
     };
-    
+
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
     };
-    
+
     const handlePasswordSubmit = async () => {
         const token = localStorage.getItem("token");
         try {
@@ -193,7 +201,7 @@ const [userForPasswordUpdate, setUserForPasswordUpdate] = useState(null);
                 },
                 body: JSON.stringify({ password }), // Send new password
             });
-    
+
             if (response.ok) {
                 message.success("Password updated successfully!");
                 setIsPasswordModalVisible(false);
@@ -207,7 +215,7 @@ const [userForPasswordUpdate, setUserForPasswordUpdate] = useState(null);
         }
     };
 
-    
+
     const columns = [
         {
             title: "Username",
@@ -235,7 +243,7 @@ const [userForPasswordUpdate, setUserForPasswordUpdate] = useState(null);
             key: "CreatedAt",
             render: (_, record) => {
                 const { CreatedAt } = record;
-                return formatDate(CreatedAt) ;
+                return formatDate(CreatedAt);
             },
         },
         {
@@ -243,7 +251,7 @@ const [userForPasswordUpdate, setUserForPasswordUpdate] = useState(null);
             key: "action",
             render: (_, user) => (
                 <>
-                 <Button onClick={() => handleUpdatePassword(user)} style={{ marginRight: 8 }} type="primary">Update Password</Button>
+                    <Button onClick={() => handleUpdatePassword(user)} style={{ marginRight: 8 }} type="primary">Update Password</Button>
                     <Button onClick={() => handleEditUser(user)} style={{ marginRight: 8 }}>Edit</Button>
                     <Button onClick={() => handleDeleteUser(user.ID)} type="danger">Delete</Button>
                 </>
@@ -261,7 +269,7 @@ const [userForPasswordUpdate, setUserForPasswordUpdate] = useState(null);
                 value={search}
                 onChange={handleSearch}
                 style={{ marginBottom: 20, width: 300 }}
-                
+
             />
             <Table
                 columns={columns}
@@ -280,8 +288,8 @@ const [userForPasswordUpdate, setUserForPasswordUpdate] = useState(null);
                 style={{ marginTop: 20, float: "right" }}
                 showSizeChanger // Show page size changer
                 onShowSizeChange={(current, pageSize) => setLimit(pageSize)} // Update limit when page size changes
-                pageSizeOptions={['5','10', '20', '50', '100']} // Customize page size options
-                
+                pageSizeOptions={['5', '10', '20', '50', '100']} // Customize page size options
+
             />
 
             <UserForm
@@ -294,18 +302,18 @@ const [userForPasswordUpdate, setUserForPasswordUpdate] = useState(null);
                 user={editingUser} // Pass the current user data to the form
             />
 
-<Modal
-            title="Update Password"
-            visible={isPasswordModalVisible}
-            onCancel={() => setIsPasswordModalVisible(false)}
-            onOk={handlePasswordSubmit}
-        >
-            <Input.Password
-                placeholder="Enter new password"
-                value={password}
-                onChange={handlePasswordChange}
-            />
-        </Modal>
+            <Modal
+                title="Update Password"
+                visible={isPasswordModalVisible}
+                onCancel={() => setIsPasswordModalVisible(false)}
+                onOk={handlePasswordSubmit}
+            >
+                <Input.Password
+                    placeholder="Enter new password"
+                    value={password}
+                    onChange={handlePasswordChange}
+                />
+            </Modal>
 
         </div>
     );
@@ -313,16 +321,16 @@ const [userForPasswordUpdate, setUserForPasswordUpdate] = useState(null);
 
 const formatDate = (isoString) => {
     const date = new Date(isoString);
-  
+
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
     const day = String(date.getDate()).padStart(2, '0');
-  
+
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
     const seconds = String(date.getSeconds()).padStart(2, '0');
-  
+
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  };
+};
 
 export default UserList;

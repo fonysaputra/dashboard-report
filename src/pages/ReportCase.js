@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Table, Input, Pagination, message, Card, DatePicker, Col, Row, Select, Modal, Image, Spin, Button } from "antd";
-import { debounce } from "lodash"; 
+import { debounce } from "lodash";
 import * as XLSX from "xlsx"; // Import xlsx library
 
 const { Option } = Select;
@@ -21,14 +21,14 @@ const ReportCase = () => {
     const [loadingImages, setLoadingImages] = useState(false); // State to manage loading images
     const [reportImages, setReportImages] = useState([]); // State to store Base64 images
     const [reportAfterImages, setReportAfterImages] = useState([]); // State to store Base64 images
-    
+
     const [status, setStatus] = useState("");
-    
+
     const role = localStorage.getItem("rl");
 
-    const fetchReport = async (page, limit, search, date, sortColumn, sortDirection,status) => {
+    const fetchReport = async (page, limit, search, date, sortColumn, sortDirection, status) => {
         setLoading(true);
-        
+
         try {
             const token = localStorage.getItem("token");
             const response = await fetch(
@@ -41,6 +41,13 @@ const ReportCase = () => {
                     },
                 }
             );
+
+            // Check if the response status is 401 (Unauthorized)
+            if (response.status === 401) {
+                localStorage.removeItem("token"); // Remove the token from local storage
+                window.location.href = "/sign-in"; // Redirect to the login page
+                return; // Stop further execution
+            }
 
             const data = await response.json();
 
@@ -59,8 +66,8 @@ const ReportCase = () => {
     };
 
     useEffect(() => {
-        
-        fetchReport(page, limit, search, selectedDate, sortColumn, sortDirection,status);
+
+        fetchReport(page, limit, search, selectedDate, sortColumn, sortDirection, status);
         const observer = new ResizeObserver(
             debounce(() => {
                 requestAnimationFrame(() => {
@@ -77,7 +84,7 @@ const ReportCase = () => {
             observer.disconnect(); // Clean up on component unmount
         };
 
-    }, [page, limit, search, selectedDate, sortColumn, sortDirection,status]);
+    }, [page, limit, search, selectedDate, sortColumn, sortDirection, status]);
 
     const handleSearch = (e) => {
         setSearch(e.target.value);
@@ -97,7 +104,7 @@ const ReportCase = () => {
     };
 
     const handleSortStatus = (value) => {
-      
+
         setStatus(value);
         setPage(1);
     };
@@ -169,7 +176,7 @@ const ReportCase = () => {
             if (response.ok) {
                 message.success("Cases deleted successfully!");
 
-                fetchReport(page, limit, search, selectedDate, sortColumn, sortDirection,status);
+                fetchReport(page, limit, search, selectedDate, sortColumn, sortDirection, status);
             } else {
                 message.error("Failed to delete cases.");
             }
@@ -276,8 +283,8 @@ const ReportCase = () => {
             key: "action",
             render: (_, report) => (
                 <>
-                {role === "ADMIN" ? 
-                    <Button onClick={() => handleDeleteCases(report.id)} type="danger">Delete</Button> : <></> }
+                    {role === "ADMIN" ?
+                        <Button onClick={() => handleDeleteCases(report.id)} type="danger">Delete</Button> : <></>}
                 </>
             ),
         },
@@ -312,8 +319,8 @@ const ReportCase = () => {
                             onChange={handleSortChange}
                             size="large"
                             style={{ width: '100%', marginBottom: 20 }}
-                      
-                         
+
+
                         >
                             <Option value="created_at|asc">Reported Date (Asc)</Option>
                             <Option value="created_at|desc">Reported Date (Desc)</Option>
@@ -329,13 +336,13 @@ const ReportCase = () => {
                     </Col>
                     <Col span={8}>
                         <Select
-                           // defaultValue={`${sortColumn}|${sortDirection}`}
+                            // defaultValue={`${sortColumn}|${sortDirection}`}
                             onChange={handleSortStatus}
                             size="large"
                             style={{ width: '100%', marginBottom: 20 }}
-                               placeholder="Change Status"
+                            placeholder="Change Status"
                         >
-                             <Option value="">All</Option>
+                            <Option value="">All</Option>
                             <Option value="OPEN">Open</Option>
                             <Option value="IN_PROGRESS">In Progress</Option>
                             <Option value="REVIEW">Review</Option>

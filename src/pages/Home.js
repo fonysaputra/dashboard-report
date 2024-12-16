@@ -33,6 +33,14 @@ function Home() {
             Authorization: `Bearer ${token}`,
           },
         });
+
+        // Check if the response status is 401 (Unauthorized)
+        if (response.status === 401) {
+          localStorage.removeItem("token"); // Remove the token from local storage
+          window.location.href = "/sign-in"; // Redirect to the login page
+          return; // Stop further execution
+        }
+
         const result = await response.json();
         var total = "0";
         var open = "0";
@@ -75,32 +83,32 @@ function Home() {
 
   const total = [
     <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#fff" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="10" stroke="black" fill="#fff"/>
-    <text x="12" y="16" font-size="7" text-anchor="middle" fill="black">T</text>
-  </svg>
-  ,
+      <circle cx="12" cy="12" r="10" stroke="black" fill="#fff" />
+      <text x="12" y="16" font-size="7" text-anchor="middle" fill="black">T</text>
+    </svg>
+    ,
   ];
   const inprogress = [
     <svg width="22" height="22" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
-  <path
-    d="M18 2.0845
+      <path
+        d="M18 2.0845
       a 15.9155 15.9155 0 0 1 0 31.831
       a 15.9155 15.9155 0 0 1 0 -31.831"
-    fill="#fff"
-    stroke="#ddd"
-    stroke-width="2.5"
-  />
-  <path
-    d="M18 2.0845
+        fill="#fff"
+        stroke="#ddd"
+        stroke-width="2.5"
+      />
+      <path
+        d="M18 2.0845
       a 15.9155 15.9155 0 0 1 0 31.831"
-    fill="#fff"
-    stroke="#4caf50"
-    stroke-width="2.5"
-    stroke-dasharray="65, 100"
-  />
-  <text x="18" y="20.35" font-size="5" text-anchor="middle" fill="#333">65%</text>
-</svg>
-,
+        fill="#fff"
+        stroke="#4caf50"
+        stroke-width="2.5"
+        stroke-dasharray="65, 100"
+      />
+      <text x="18" y="20.35" font-size="5" text-anchor="middle" fill="#333">65%</text>
+    </svg>
+    ,
   ];
   const open = [
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22">
@@ -110,10 +118,10 @@ function Home() {
   ];
   const cart = [
     <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#fff" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <circle cx="12" cy="12" r="10" stroke="green" fill="#fff"/>
-  <path d="M9 12l2 2l4-4" stroke="green" fill="#fff"/>
-</svg>
-,
+      <circle cx="12" cy="12" r="10" stroke="green" fill="#fff" />
+      <path d="M9 12l2 2l4-4" stroke="green" fill="#fff" />
+    </svg>
+    ,
   ];
 
   const countData = [
