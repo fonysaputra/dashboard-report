@@ -30,6 +30,14 @@ const TitleList = () => {
                 }
             );
 
+            // Check if the response status is 401 (Unauthorized)
+            if (response.status === 401) {
+                message.error(data.responseDesc || "Session Expired.");
+                localStorage.removeItem("token"); // Remove the token from local storage
+                window.location.href = "/sign-in"; // Redirect to the login page
+                return; // Stop further execution
+            }
+
             const data = await response.json();
 
             if (response.ok) {
@@ -113,12 +121,12 @@ const TitleList = () => {
                 : `${process.env.REACT_APP_API_URL}/api/v1/case/title`;
 
 
-           
+
             // Only include the password if creating a new title
             const body = editingTitle ?
                 {
                     nameTitle: titleData.nameTitle,
-                  
+
                 } : titleData;
 
             const response = await fetch(url, {
@@ -154,14 +162,14 @@ const TitleList = () => {
             dataIndex: "nameTitle",
             key: "nameTitle",
         },
-       
+
         {
             title: "Created At",
             dataIndex: "createdAt",
             key: "createdAt",
             render: (_, record) => {
                 const { createdAt } = record;
-                return formatDate(createdAt) ;
+                return formatDate(createdAt);
             },
         },
         {
@@ -186,7 +194,7 @@ const TitleList = () => {
                 value={search}
                 onChange={handleSearch}
                 style={{ marginBottom: 20, width: 300 }}
-                
+
             />
             <Table
                 columns={columns}
@@ -205,8 +213,8 @@ const TitleList = () => {
                 style={{ marginTop: 20, float: "right" }}
                 showSizeChanger // Show page size changer
                 onShowSizeChange={(current, pageSize) => setLimit(pageSize)} // Update limit when page size changes
-                pageSizeOptions={['5','10', '20', '50', '100']} // Customize page size options
-                
+                pageSizeOptions={['5', '10', '20', '50', '100']} // Customize page size options
+
             />
 
             <TitleForm
@@ -224,16 +232,16 @@ const TitleList = () => {
 
 const formatDate = (isoString) => {
     const date = new Date(isoString);
-  
+
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
     const day = String(date.getDate()).padStart(2, '0');
-  
+
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
     const seconds = String(date.getSeconds()).padStart(2, '0');
-  
+
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  };
+};
 
 export default TitleList;
