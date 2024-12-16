@@ -1,5 +1,5 @@
 // src/components/ProtectedRoute.js
-import React from 'react';
+import React,{ useEffect, useState } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
