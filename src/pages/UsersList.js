@@ -19,6 +19,23 @@ const UserList = () => {
     const [password, setPassword] = useState("");
     const [userForPasswordUpdate, setUserForPasswordUpdate] = useState(null);
 
+
+    useEffect(() => {
+        fetchUsers(page, limit, search);
+
+        const resizeObserver = new ResizeObserver(debounce(() => {
+            // Your resize handling logic
+        }, 200));
+
+        resizeObserver.observe(document.body); // or your specific component
+        resizeObserverRef.current = resizeObserver;
+
+        return () => {
+            resizeObserver.disconnect();
+        };
+    }, [page, limit, search]);
+
+    
     const fetchUsers = async (page, limit, search) => {
         setLoading(true);
         try {
@@ -52,26 +69,11 @@ const UserList = () => {
             }
         } catch (error) {
             message.error("An error occurred while fetching users.");
-            console.error("Fetch error:", error);
+            
         } finally {
             setLoading(false);
         }
-    };
-
-    useEffect(() => {
-        fetchUsers(page, limit, search);
-
-        const resizeObserver = new ResizeObserver(debounce(() => {
-            // Your resize handling logic
-        }, 200));
-
-        resizeObserver.observe(document.body); // or your specific component
-        resizeObserverRef.current = resizeObserver;
-
-        return () => {
-            resizeObserver.disconnect();
-        };
-    }, [page, limit, search]);
+    };   
 
     const handleSearch = (e) => {
         setSearch(e.target.value);
