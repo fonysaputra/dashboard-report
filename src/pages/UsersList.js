@@ -147,6 +147,9 @@ const UserList = () => {
                 case "Reviewer":
                     userData.roles = "EFO"
                     break;
+                    case "Supervisi":
+                        userData.roles = "SPV"
+                        break;
                 default:
                     break;
             }

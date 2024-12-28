@@ -125,7 +125,7 @@ const ReportCase = () => {
         try {
             const token = localStorage.getItem("token");
             const response = await fetch(
-                `${process.env.REACT_APP_API_URL}/images/${reportId}`,
+                `${process.env.REACT_APP_API_URL}/api/v1/images/${reportId}`,
                 {
                     method: "POST",
                     headers: {
@@ -278,17 +278,28 @@ const ReportCase = () => {
                 onClick: () => handleRowClick(record), // Add onClick to each cell
             }),
         },
-
+        {
+            title: "Action",
+            key: "action",
+            render: (_, report) => (
+                <>
+         
+                        <Button onClick={() => handleRowClick(report)} type="info">Detail</Button> 
+                </>
+            ),
+        },
         {
             title: "Action",
             key: "action",
             render: (_, report) => (
                 <>
                     {role === "ADMIN" ?
-                        <Button onClick={() => handleDeleteCases(report.id)} type="danger">Delete</Button> : <></>}
+                        <Button onClick={() => handleDeleteCases(report)} type="danger">Delete</Button> : <></>}
                 </>
             ),
         },
+
+      
 
     ];
 
