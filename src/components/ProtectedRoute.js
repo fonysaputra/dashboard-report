@@ -10,36 +10,36 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
 
 
     useEffect(() => {
-        const validateToken = async () => {
-            try {
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/case/room/all?page=1&limit=1`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+        // const validateToken = async () => {
+        //     try {
+        //         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/v1/case/room/all?page=1&limit=1`, {
+        //             method: "POST",
+        //             headers: {
+        //                 "Content-Type": "application/json",
+        //                 Authorization: `Bearer ${token}`,
+        //             },
+        //         });
 
-                // Check if the response status is 401 (Unauthorized)
-                // if (response.status === 401) {
-                //     message.error("Session Expired.");
-                //     localStorage.removeItem("token"); // Remove the token from local storage
-                //     window.location.href = "/sign-in"; // Redirect to the login page
-                //     return; // Stop further execution
-                // }
+        //         // Check if the response status is 401 (Unauthorized)
+        //         // if (response.status === 401) {
+        //         //     message.error("Session Expired.");
+        //         //     localStorage.removeItem("token"); // Remove the token from local storage
+        //         //     window.location.href = "/sign-in"; // Redirect to the login page
+        //         //     return; // Stop further execution
+        //         // }
 
-                if (response.status === 200) {
-                    setIsAuthenticated(true); // Token is valid
-                } else {
-                    setIsAuthenticated(false); // Token is invalid
-                    localStorage.removeItem("token"); // Clear invalid token
-                }
-            } catch (error) {
-            }
-        };
+        //         if (response.status === 200) {
+        //             setIsAuthenticated(true); // Token is valid
+        //         } else {
+        //             setIsAuthenticated(false); // Token is invalid
+        //             localStorage.removeItem("token"); // Clear invalid token
+        //         }
+        //     } catch (error) {
+        //     }
+        // };
 
         if (token) {
-            validateToken();
+         //   validateToken();
         } else {
             localStorage.removeItem("token"); // Remove the token from local storage
             setIsAuthenticated(false); // No token present
