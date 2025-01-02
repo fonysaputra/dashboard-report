@@ -21,12 +21,12 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
                 });
 
                 // Check if the response status is 401 (Unauthorized)
-                if (response.status === 401) {
-                    message.error("Session Expired.");
-                    localStorage.removeItem("token"); // Remove the token from local storage
-                    window.location.href = "/sign-in"; // Redirect to the login page
-                    return; // Stop further execution
-                }
+                // if (response.status === 401) {
+                //     message.error("Session Expired.");
+                //     localStorage.removeItem("token"); // Remove the token from local storage
+                //     window.location.href = "/sign-in"; // Redirect to the login page
+                //     return; // Stop further execution
+                // }
 
                 if (response.status === 200) {
                     setIsAuthenticated(true); // Token is valid
