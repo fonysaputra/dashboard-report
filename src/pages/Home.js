@@ -36,11 +36,11 @@ function Home() {
         });
 
         // Check if the response status is 401 (Unauthorized)
-        if (response.status === 401) {
-          message.error("Session Expired.");
-          localStorage.removeItem("token"); // Remove the token from local storage
-          window.location.href = "/sign-in"; // Redirect to the login page
-        }
+        // if (response.status === 401) {
+        //   message.error("Session Expired.");
+        //   localStorage.removeItem("token"); // Remove the token from local storage
+        //   window.location.href = "/sign-in"; // Redirect to the login page
+        // }
 
         const result = await response.json();
         var total = "0";
