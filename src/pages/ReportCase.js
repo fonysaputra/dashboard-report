@@ -294,7 +294,7 @@ const ReportCase = () => {
             render: (_, report) => (
                 <>
                     {role === "ADMIN" ?
-                        <Button onClick={() => handleDeleteCases(report)} type="danger">Delete</Button> : <></>}
+                        <Button onClick={() => handleDeleteCases(report.id)} type="danger">Delete</Button> : <></>}
                 </>
             ),
         },
