@@ -40,6 +40,8 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
 
         if (token) {
          //   validateToken();
+
+         setIsAuthenticated(true);
         } else {
             localStorage.removeItem("token"); // Remove the token from local storage
             setIsAuthenticated(false); // No token present
