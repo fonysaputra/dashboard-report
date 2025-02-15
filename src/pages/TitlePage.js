@@ -20,7 +20,7 @@ const TitleList = () => {
         try {
             const token = localStorage.getItem("token");
             const response = await fetch(
-                `${process.env.REACT_APP_API_URL}/api/v1/case/title/all?page=${page}&limit=${limit}&titlename=${search}`,
+                `${process.env.REACT_APP_API_URL}/api/v1/case/title/all?page=${page}&limit=${limit}&search=${search}`,
                 {
                     method: "POST",
                     headers: {
