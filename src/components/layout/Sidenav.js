@@ -124,6 +124,20 @@ function Sidenav({ color }) {
         </Menu.Item>
 
         <Menu.Item key="3">
+          <NavLink to="/summary-report">
+            <span
+              className="icon"
+              style={{
+                background: page === "report" ? color : "",
+              }}
+            >
+              {signin}
+            </span>
+            <span className="label">Summary Report</span>
+          </NavLink>
+        </Menu.Item>
+
+        <Menu.Item key="3">
           <NavLink to="/report-case">
             <span
               className="icon"

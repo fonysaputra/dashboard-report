@@ -2,8 +2,6 @@
 import React, { useEffect, useState }  from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
-import { message } from "antd";
-
 const ProtectedRoute = ({ component: Component, ...rest }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(null); // Use `null` to indicate the loading state
     const token = localStorage.getItem('token'); // Check for the token in local storage

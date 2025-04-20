@@ -14,6 +14,7 @@ import "./assets/styles/main.css";
 import "./assets/styles/responsive.css";
 import TitleList from "./pages/TitlePage";
 import RoomList from "./pages/RoomPage";
+import SummaryReport from "./pages/SummaryReport";
 
 const resizeObserverErr = window.onerror;
 window.onerror = function(message, source, lineno, colno, error) {
@@ -38,6 +39,8 @@ function App() {
                     <ProtectedRoute exact path="/report-case" component={CaseList} />
                     <ProtectedRoute exact path="/master-data-title" component={TitleList} />
                     <ProtectedRoute exact path="/master-data-room" component={RoomList} />
+                    
+                    <ProtectedRoute exact path="/summary-report" component={SummaryReport} />
                     <Redirect from="*" to="/dashboard" />
                 </Main>
             </Switch>
