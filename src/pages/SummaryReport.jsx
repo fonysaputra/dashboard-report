@@ -86,7 +86,8 @@ const SummaryReport = () => {
         ]);
 
         setRoomOptions(roomRes.data?.data || []);
-        setTitleOptions(titleRes.data?.data || []);
+        const sortedTitles = (titleRes.data?.data || []).sort((a, b) => a.nameTitle.localeCompare(b.nameTitle));
+        setTitleOptions(sortedTitles);
       } catch (err) {
         console.error("Error fetching room/title options:", err);
       }
@@ -141,6 +142,17 @@ const SummaryReport = () => {
       {item.reason && <div className="report-reason"><strong>Reason:</strong> {item.reason}</div>}
     </div>
   );
+
+  const clearFilters = () => {
+    const today = new Date();
+    setStartDate(new Date(today.getFullYear(), today.getMonth(), 1));
+    setEndDate(today);
+    setRoomFilter('all');
+    setTitleFilter('all');
+    setLocationType('all');
+    setStatusFilter('all');
+  };
+
 
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">Error: {error}</div>;
@@ -222,7 +234,7 @@ const SummaryReport = () => {
               <option value="all">All</option>
               {roomOptions.map((room) => (
                 <option key={room.name} value={room.name}>
-                 Room {room.name}
+                  Room {room.name}
                 </option>
               ))}
             </select>
@@ -239,7 +251,7 @@ const SummaryReport = () => {
               <option value="all">All</option>
               {titleOptions.map((title) => (
                 <option key={title.nameTitle} value={title.nameTitle}>
-                 {title.nameTitle}
+                  {title.nameTitle}
                 </option>
               ))}
             </select>
@@ -275,6 +287,13 @@ const SummaryReport = () => {
             </select>
           </div>
         </div>
+
+        <div className="filter-actions">
+          <button onClick={clearFilters} className="clear-filters-button">
+            Clear Filters
+          </button>
+        </div>
+
       </div>
 
       <div className="dashboard-content">
