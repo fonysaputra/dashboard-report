@@ -19,6 +19,7 @@ function Home() {
     inProgress: "0",
     open: "0",
     done: "0",
+     review: "0",
   });
 
 
@@ -47,6 +48,7 @@ function Home() {
         var open = "0";
         var inprogress = "0";
         var done = "0";
+          var review = "0";
         result.data.map((item) => {
           // Use conditions to assign the correct value based on the title
           switch (item.title) {
@@ -62,6 +64,9 @@ function Home() {
             case "Done":
               done = item.data;
               break;
+             case "Review":
+              review = item.data;
+              break;
             default:
               break;
           }
@@ -71,6 +76,7 @@ function Home() {
           inProgress: inprogress,  // Use the correct variable here
           open: open,
           done: done,
+          review:review,
         });
       } catch (error) {
        
@@ -126,13 +132,17 @@ function Home() {
     ,
   ];
 
+  const review = [
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" role="img" aria-label="Review">
+  <title>Review</title>
+  <path fill="none" stroke="#fff" stroke-width="1.6" stroke-linejoin="round" d="M16 4h-2.18A2 2 0 0 0 12 2h0a2 2 0 0 0-1.82 2H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/>
+  <rect x="10" y="3.2" width="4" height="1" rx="0.3" fill="#fff"/>
+  <path d="M8.5 12.5l2 2 5-5" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+  ];
+
   const countData = [
-    {
-      title: "Total Case",
-      data: counts.total,
-      icon: total,
-      bnb: "bnb2",
-    },
+  
     {
       title: "In Progress",
       data: counts.inProgress,
@@ -145,10 +155,23 @@ function Home() {
       icon: open,
       bnb: "redtext",
     },
+        {
+      title: "Review",
+      data: counts.review,
+      icon: review,
+      bnb: "bnb2",
+    },
     {
       title: "Done",
       data: counts.done,
       icon: cart,
+      bnb: "bnb2",
+    },
+
+      {
+      title: "Total Case",
+      data: counts.total,
+      icon: total,
       bnb: "bnb2",
     },
   ];
