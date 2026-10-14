@@ -84,6 +84,22 @@ function Sidenav({ color }) {
   ];
 
 
+  const maintenance = [
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      key={0}
+    >
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+    </svg>,
+  ];
+
   return (
     <>
       <div className="brand">
@@ -118,6 +134,24 @@ function Sidenav({ color }) {
             <span className="label">Users</span>
           </NavLink>
         </Menu.Item> : <></>}
+
+        <Menu.Item className="menu-item-header" key="maint-header">
+          Maintenance & MEP
+        </Menu.Item>
+
+        <Menu.Item key="maint-monthly">
+          <NavLink to="/maintenance-monthly">
+            <span
+              className="icon"
+              style={{
+                background: page === "maintenance-monthly" ? color : "",
+              }}
+            >
+              {maintenance}
+            </span>
+            <span className="label">Data Maintenance Monthly</span>
+          </NavLink>
+        </Menu.Item>
 
         <Menu.Item className="menu-item-header" key="5">
           Reported

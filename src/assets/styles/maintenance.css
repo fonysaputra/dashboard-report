@@ -1,0 +1,356 @@
+/* Maintenance Module Styling */
+
+.maintenance-container {
+  padding: 0 8px;
+}
+
+/* Header & Banner */
+.maintenance-banner {
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  border-radius: 16px;
+  padding: 24px 28px;
+  color: #ffffff;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.maintenance-banner::after {
+  content: "";
+  position: absolute;
+  right: -20px;
+  top: -20px;
+  width: 180px;
+  height: 180px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.maintenance-banner h2 {
+  color: #ffffff !important;
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-size: 24px;
+}
+
+.maintenance-banner p {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  margin-bottom: 0;
+  max-width: 650px;
+}
+
+/* Metric / KPI Cards */
+.maint-stat-card {
+  border-radius: 14px;
+  border: 1px solid #eef2f6;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s ease-in-out;
+  overflow: hidden;
+  position: relative;
+}
+
+.maint-stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.maint-stat-card .ant-card-body {
+  padding: 18px 20px;
+}
+
+.stat-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.stat-icon-blue {
+  background: rgba(59, 130, 246, 0.12);
+  color: #2563eb;
+}
+
+.stat-icon-red {
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+}
+
+.stat-icon-amber {
+  background: rgba(245, 158, 11, 0.14);
+  color: #d97706;
+}
+
+.stat-icon-green {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.stat-subtitle {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+/* Overdue Pulsing Badge */
+.pulse-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+  animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+.due-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.normal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+/* Category Badges */
+.category-badge-ac {
+  background: #e0f2fe;
+  color: #0369a1;
+  font-weight: 600;
+  border: 1px solid #bae6fd;
+}
+
+.category-badge-genset {
+  background: #ffedd5;
+  color: #c2410c;
+  font-weight: 600;
+  border: 1px solid #fed7aa;
+}
+
+.category-badge-pompa {
+  background: #ede9fe;
+  color: #6d28d9;
+  font-weight: 600;
+  border: 1px solid #ddd6fe;
+}
+
+.category-badge-lift {
+  background: #fce7f3;
+  color: #be185d;
+  font-weight: 600;
+  border: 1px solid #fbcfe8;
+}
+
+.category-badge-boiler {
+  background: #fee2e2;
+  color: #b91c1c;
+  font-weight: 600;
+  border: 1px solid #fecaca;
+}
+
+.category-badge-default {
+  background: #f1f5f9;
+  color: #475569;
+  font-weight: 600;
+  border: 1px solid #e2e8f0;
+}
+
+/* Filter Section */
+.filter-card {
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+/* Custom Table Polish */
+.maint-table .ant-table-thead > tr > th {
+  background: #f8fafc;
+  color: #334155;
+  font-weight: 600;
+  font-size: 13px;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 14px 16px;
+}
+
+.maint-table .ant-table-tbody > tr > td {
+  padding: 14px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.maint-table .ant-table-tbody > tr:hover > td {
+  background-color: #f8faff !important;
+}
+
+.row-overdue {
+  background-color: #fff7f7 !important;
+}
+
+.row-overdue:hover > td {
+  background-color: #fee2e2 !important;
+}
+
+/* Modal Styling */
+.maint-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.maint-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.alert-banner-urgent {
+  background: #fef2f2;
+  border: 1px solid #f87171;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.alert-banner-urgent .alert-icon {
+  font-size: 24px;
+  color: #dc2626;
+  margin-top: 2px;
+}
+
+.alert-banner-urgent .alert-title {
+  font-weight: 700;
+  color: #991b1b;
+  font-size: 15px;
+  margin-bottom: 2px;
+}
+
+.alert-banner-urgent .alert-desc {
+  color: #7f1d1d;
+  font-size: 13px;
+  margin: 0;
+}
+
+/* Header Alert Button & Flashing Badge */
+.header-maint-alert-btn {
+  position: relative;
+  margin-right: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.header-maint-alert-btn:hover {
+  background: #fecaca;
+  color: #b91c1c;
+}
+
+.header-maint-normal-btn {
+  position: relative;
+  margin-right: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 13px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.header-maint-normal-btn:hover {
+  background: #e2e8f0;
+}
+
+/* Quick Action Suggestion Buttons */
+.quick-action-pill {
+  font-size: 11px;
+  border-radius: 12px;
+  padding: 2px 8px;
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 6px;
+  margin-bottom: 6px;
+  transition: all 0.15s;
+}
+
+.quick-action-pill:hover {
+  background: #e0f2fe;
+  color: #0284c7;
+  border-color: #7dd3fc;
+}

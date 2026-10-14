@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Row,
   Col,
@@ -6,6 +6,9 @@ import {
   Button,
 } from "antd";
 import { NavLink, Link } from "react-router-dom";
+import { WarningOutlined, ToolOutlined } from "@ant-design/icons";
+import MaintenanceAlertModal from "../MaintenanceAlertModal";
+import "../../assets/styles/maintenance.css";
 
 const toggler = [
   <svg
@@ -24,17 +27,45 @@ function Header({
   subName,
   onPress,
 }) {
-  useEffect(() => window.scrollTo(0, 0), []);
+  const [overdueCount, setOverdueCount] = useState(0);
+  const [dueSoonCount, setDueSoonCount] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+
+  const checkAlerts = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const url = `${process.env.REACT_APP_API_URL || ""}/api/v1/maintenance/alerts`;
+      const res = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+      if (res.ok) {
+        const json = await res.json();
+        setOverdueCount(json.data?.overdueCount || 0);
+        setDueSoonCount(json.data?.dueSoonCount || 0);
+      }
+    } catch (err) {
+      // Ignore background error
+    }
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    checkAlerts();
+    const interval = setInterval(checkAlerts, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Remove token from local storage
-    // Optionally, redirect to login or home page after logout
-    window.location.href = "/sign-in"; // Replace with your sign-in route
+    localStorage.removeItem("token");
+    window.location.href = "/sign-in";
   };
 
   return (
     <>
-      <Row gutter={[24, 0]}>
+      <Row gutter={[24, 0]} align="middle">
         <Col span={24} md={6}>
           <Breadcrumb>
             <Breadcrumb.Item>
@@ -54,6 +85,37 @@ function Header({
           </div>
         </Col>
         <Col span={24} md={18} className="header-control">
+          {/* Maintenance Alert Button */}
+          {overdueCount > 0 ? (
+            <button
+              className="header-maint-alert-btn"
+              onClick={() => setShowModal(true)}
+              title="Klik untuk melihat unit peralatan yang melewati jadwal maintenance"
+            >
+              <WarningOutlined />
+              <span>🚨 {overdueCount} Unit Overdue</span>
+            </button>
+          ) : dueSoonCount > 0 ? (
+            <button
+              className="header-maint-alert-btn"
+              style={{ background: "#fef3c7", borderColor: "#fde68a", color: "#92400e" }}
+              onClick={() => setShowModal(true)}
+              title="Peralatan jatuh tempo service segera"
+            >
+              <ToolOutlined />
+              <span>⚠️ {dueSoonCount} Menunggu Service</span>
+            </button>
+          ) : (
+            <button
+              className="header-maint-normal-btn"
+              onClick={() => setShowModal(true)}
+              title="Lihat status jadwal maintenance"
+            >
+              <ToolOutlined />
+              <span>Maintenance Status</span>
+            </button>
+          )}
+
           <Button
             type="link"
             className="sidebar-toggler"
@@ -66,6 +128,15 @@ function Header({
           </Link>
         </Col>
       </Row>
+
+      {/* Alert popup triggered by header or automatically */}
+      <MaintenanceAlertModal
+        forceOpen={showModal}
+        onClose={() => {
+          setShowModal(false);
+          checkAlerts();
+        }}
+      />
     </>
   );
 }
